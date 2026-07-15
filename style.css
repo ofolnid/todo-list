@@ -32,6 +32,7 @@ h1 {
 .description {
   text-align: center;
   color: #476d8c;
+  font-size: 14px;
 }
 
 #todoForm {
@@ -138,10 +139,16 @@ hr {
 }
 
 .todo-cnt {
+  display: inline-block;
+  align-self: center;
   font-size: 12px;
   color: #95a9ba;
-  width: 100%;
   text-align: center;
+  background-color: #fefefe;
+  background: rgba(254, 254, 254, 0.4);
+  padding: 8px 12px;
+  border: 2px solid #fefefe;
+  border-radius: 20px;
 }
 
 #todoCnt,
