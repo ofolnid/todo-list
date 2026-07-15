@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TodoList 실습</title>
+
+    <!-- CSS 파일 연결 -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- JavaScript 파일 연결 -->
+    <!-- defer는 HTML을 먼저 읽은 뒤 JavaScript를 실행하게 한다. -->
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <section id="todoApp">
+        <div class="title">
+          <h1>To-do List</h1>
+          <p class="description">오늘 해야 할 일을 입력하고 관리해 봅니다.</p>
+        </div>
+        <div class="todo-cnt">
+          <span>총 <span id="todoCnt">0</span>개 중 <span id="doneCnt">0</span>개 완료</span>
+        </div>
+        <form id="todoForm" class="todo-form">
+          <input type="text" id="todoInput" placeholder="할 일을 입력하세요" autocomplete="off" />
+          <button id="todoAddBtn" type="submit">추가</button>
+        </form>
+        <hr />
+
+        <ul id="todoList" class="todo-list"></ul>
+        <p id="emptyTodoListMsg">등록된 todo가 없습니다.</p>
+      </section>
+    </main>
+  </body>
+</html>

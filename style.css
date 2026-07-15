@@ -1,0 +1,156 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, "맑은 고딕", sans-serif;
+  background-color: #fefefe;
+}
+
+#todoApp {
+  margin: 30px auto;
+  padding: 32px 24px;
+  width: 340px;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  border: 1px solid #83dcff;
+  border-radius: 8px;
+  background-color: #f0fbff;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  color: #007fe7;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.description {
+  text-align: center;
+  color: #476d8c;
+}
+
+#todoForm {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+}
+
+#todoInput {
+  all: unset;
+  background-color: #fff;
+  flex: 1;
+  text-align: left;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+#todoInput:focus {
+  outline: 1px solid #76c1ff;
+}
+
+#todoAddBtn {
+  white-space: wrap;
+  flex: 0 0 auto;
+  background-color: #007fe7;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#todoAddBtn:hover {
+  background-color: #005bb5;
+}
+
+#todoList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+#todoList > li {
+  all: unset;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  color: #5b5959;
+  border: solid 1px #e6efff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  background-color: #fefefe;
+}
+
+#todoList > li:hover {
+  border-color: #76c1ff;
+}
+
+#todoList > li > label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+#todoList > li > label > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+#todoList > li > label > span:hover {
+  opacity: 0.8;
+}
+
+#todoList > li > label > span.done {
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+input[type="checkbox"]:checked {
+  accent-color: #ccc;
+}
+
+.delBtn {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.delBtn:hover {
+  opacity: 0.8;
+}
+
+hr {
+  opacity: 0.3;
+}
+
+.todo-cnt {
+  font-size: 12px;
+  color: #95a9ba;
+  width: 100%;
+  text-align: center;
+}
+
+#todoCnt,
+#doneCnt {
+  color: #007fe7;
+}
+
+#emptyTodoListMsg {
+  text-align: center;
+  color: #95a9ba;
+  font-size: 14px;
+}
