@@ -49,7 +49,17 @@ function addTodo() {
 
   label.append(checkbox, todoText);
   todo.append(label, delBtn);
-  todoList.appendChild(todo);
+
+  const firstDoneTodo = [...todoList.children].find((item) => {
+    const checkbox = item.querySelector('input[type="checkbox"]');
+    return checkbox.checked;
+  });
+
+  if (firstDoneTodo) {
+    todoList.insertBefore(todo, firstDoneTodo);
+  } else {
+    todoList.append(todo);
+  }
 
   updateSummary();
 
