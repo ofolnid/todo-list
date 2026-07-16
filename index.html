@@ -57,6 +57,15 @@
         <p id="pomodoroTime" class="pomodoro-time" role="timer" aria-live="off">25:00</p>
         <p id="pomodoroStatus" class="pomodoro-status" aria-live="polite">집중할 준비가 됐어요.</p>
 
+        <div class="tomato-harvest">
+          <div class="tomato-harvest-heading">
+            <span>오늘 수확한 토마토</span>
+            <strong><span id="tomatoCount">0</span>개</strong>
+          </div>
+          <ul id="tomatoShelf" class="tomato-shelf" aria-label="완료한 집중 세션"></ul>
+          <p id="emptyTomatoMsg">집중 세션을 완주하면 토마토가 열려요.</p>
+        </div>
+
         <div class="pomodoro-controls">
           <button id="pomodoroStart" type="button">시작</button>
           <button id="pomodoroReset" type="button" class="secondary-btn">초기화</button>

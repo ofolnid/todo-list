@@ -283,6 +283,49 @@ hr {
   text-align: center;
 }
 
+.tomato-harvest {
+  padding: 12px;
+  border-radius: 9px;
+  background-color: rgba(255, 255, 255, 0.65);
+}
+
+.tomato-harvest-heading {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #476d8c;
+  font-size: 12px;
+}
+
+.tomato-harvest-heading strong {
+  color: #007fe7;
+}
+
+.tomato-shelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  list-style: none;
+}
+
+.tomato-shelf > li {
+  width: 32px;
+  height: 32px;
+  animation: tomato-pop 450ms cubic-bezier(0.2, 0.9, 0.3, 1.35);
+}
+
+.tomato-shelf img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#emptyTomatoMsg {
+  color: #95a9ba;
+  font-size: 11px;
+  text-align: center;
+}
+
 .pomodoro-controls button {
   flex: 1;
   padding: 9px 12px;
@@ -305,6 +348,24 @@ hr {
 @media (max-width: 700px) {
   .container {
     grid-template-columns: minmax(0, 340px);
+  }
+}
+
+@keyframes tomato-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.65);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tomato-shelf > li {
+    animation: none;
   }
 }
 

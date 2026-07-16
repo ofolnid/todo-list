@@ -13,6 +13,9 @@ const pomodoroTime = document.querySelector("#pomodoroTime");
 const pomodoroStatus = document.querySelector("#pomodoroStatus");
 const pomodoroStart = document.querySelector("#pomodoroStart");
 const pomodoroReset = document.querySelector("#pomodoroReset");
+const tomatoCountElement = document.querySelector("#tomatoCount");
+const tomatoShelf = document.querySelector("#tomatoShelf");
+const emptyTomatoMessage = document.querySelector("#emptyTomatoMsg");
 
 const FOCUS_SECONDS = 25 * 60;
 const BREAK_SECONDS = 5 * 60;
@@ -22,6 +25,7 @@ let remainingSeconds = FOCUS_SECONDS;
 let timerId = null;
 let timerEndsAt = null;
 let nextTodoId = 1;
+let tomatoCount = 0;
 
 updateSummary();
 
@@ -192,6 +196,7 @@ function finishPomodoro() {
   timerEndsAt = null;
 
   if (timerMode === "focus") {
+    addTomato();
     timerMode = "break";
     remainingSeconds = BREAK_SECONDS;
     pomodoroStatus.textContent = "집중 완료! 5분 동안 쉬어가세요.";
@@ -226,4 +231,23 @@ function renderPomodoroTime() {
   const seconds = String(remainingSeconds % 60).padStart(2, "0");
   pomodoroTime.textContent = `${minutes}:${seconds}`;
   document.title = timerId ? `${minutes}:${seconds} · TodoList` : "TodoList 실습";
+}
+
+function addTomato() {
+  tomatoCount++;
+
+  const tomatoItem = document.createElement("li");
+  const tomatoImage = document.createElement("img");
+  tomatoImage.src = "assets/third-party/noto-emoji/tomato.png";
+  tomatoImage.alt = "";
+  tomatoImage.width = 32;
+  tomatoImage.height = 32;
+
+  tomatoItem.title = `${tomatoCount}번째 집중 세션`;
+  tomatoItem.setAttribute("aria-label", `${tomatoCount}번째 집중 세션 완료`);
+  tomatoItem.append(tomatoImage);
+  tomatoShelf.append(tomatoItem);
+
+  tomatoCountElement.textContent = tomatoCount;
+  emptyTomatoMessage.hidden = true;
 }
