@@ -135,7 +135,8 @@ input[type="checkbox"]:checked {
 }
 
 hr {
-  opacity: 0.3;
+  opacity: 0.8;
+  border: 1px solid #fff;
 }
 
 .todo-cnt {
