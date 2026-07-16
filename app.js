@@ -58,21 +58,39 @@ function addTodo() {
 }
 
 function moveTodo(todo, isDone) {
+  const previousPositions = new Map(
+    [...todoList.children].map((item) => [item, item.getBoundingClientRect().top]),
+  );
+
   if (isDone) {
     todoList.append(todo);
-    return;
-  }
-
-  const firstDoneTodo = [...todoList.children].find((item) => {
-    const checkbox = item.querySelector('input[type="checkbox"]');
-    return checkbox.checked;
-  });
-
-  if (firstDoneTodo) {
-    todoList.insertBefore(todo, firstDoneTodo);
   } else {
-    todoList.append(todo);
+    const firstDoneTodo = [...todoList.children].find((item) => {
+      const checkbox = item.querySelector('input[type="checkbox"]');
+      return checkbox.checked;
+    });
+
+    if (firstDoneTodo) {
+      todoList.insertBefore(todo, firstDoneTodo);
+    } else {
+      todoList.append(todo);
+    }
   }
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  [...todoList.children].forEach((item) => {
+    const previousTop = previousPositions.get(item);
+    const currentTop = item.getBoundingClientRect().top;
+    const distance = previousTop - currentTop;
+
+    if (distance === 0) return;
+
+    item.animate(
+      [{ transform: `translateY(${distance}px)` }, { transform: "translateY(0)" }],
+      { duration: 300, easing: "ease-out" },
+    );
+  });
 }
 
 function updateSummary() {
