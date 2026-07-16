@@ -21,6 +21,7 @@ function addTodo() {
   const text = todoInput.value.trim();
   if (text === "") {
     alert("내용을 입력해주세요!");
+    todoInput.focus();
     return;
   }
 
