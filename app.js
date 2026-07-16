@@ -16,6 +16,7 @@ const pomodoroReset = document.querySelector("#pomodoroReset");
 const tomatoCountElement = document.querySelector("#tomatoCount");
 const tomatoShelf = document.querySelector("#tomatoShelf");
 const emptyTomatoMessage = document.querySelector("#emptyTomatoMsg");
+const completionMessage = document.querySelector("#completionMessage");
 
 const FOCUS_SECONDS = 25 * 60;
 const BREAK_SECONDS = 5 * 60;
@@ -65,6 +66,7 @@ function addTodo() {
     todoText.classList.toggle("done", checkbox.checked);
     moveTodo(todo, checkbox.checked);
     updateSummary();
+    if (checkbox.checked) celebrateAllTodosDone();
   });
 
   delBtn.addEventListener("click", () => {
@@ -250,4 +252,47 @@ function addTomato() {
 
   tomatoCountElement.textContent = tomatoCount;
   emptyTomatoMessage.hidden = true;
+}
+
+function celebrateAllTodosDone() {
+  const todoCount = todoList.children.length;
+  const doneCount = todoList.querySelectorAll('input[type="checkbox"]:checked').length;
+
+  if (todoCount === 0 || todoCount !== doneCount) return;
+
+  completionMessage.hidden = false;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    window.setTimeout(() => {
+      completionMessage.hidden = true;
+    }, 2800);
+    return;
+  }
+
+  const messageAnimation = completionMessage.animate(
+    [
+      { opacity: 0, transform: "translate(-50%, 12px)" },
+      { opacity: 1, transform: "translate(-50%, 0)", offset: 0.2 },
+      { opacity: 1, transform: "translate(-50%, 0)", offset: 0.8 },
+      { opacity: 0, transform: "translate(-50%, -8px)" },
+    ],
+    { duration: 2800, easing: "ease-out" },
+  );
+  messageAnimation.onfinish = () => {
+    completionMessage.hidden = true;
+  };
+
+  if (typeof window.confetti !== "function") return;
+
+  const options = {
+    particleCount: 55,
+    spread: 65,
+    startVelocity: 35,
+    colors: ["#007fe7", "#83dcff", "#f0fbff", "#ffd166"],
+    disableForReducedMotion: true,
+  };
+
+  window.confetti({ ...options, angle: 60, origin: { x: 0, y: 0.65 } });
+  window.confetti({ ...options, angle: 120, origin: { x: 1, y: 0.65 } });
 }

@@ -10,6 +10,7 @@
 
     <!-- JavaScript 파일 연결 -->
     <!-- defer는 HTML을 먼저 읽은 뒤 JavaScript를 실행하게 한다. -->
+    <script src="assets/third-party/canvas-confetti/confetti.browser.min.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -72,5 +73,8 @@
         </div>
       </section>
     </main>
+    <p id="completionMessage" class="completion-message" role="status" hidden>
+      오늘 할 일을 모두 완료했어요!
+    </p>
   </body>
 </html>

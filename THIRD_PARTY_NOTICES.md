@@ -10,3 +10,14 @@
 
 The complete license text is included at
 `assets/third-party/noto-emoji/LICENSE`.
+
+## canvas-confetti
+
+- Project: canvas-confetti by Kiril Vatev
+- Version: 1.9.4
+- Source: https://github.com/catdad/canvas-confetti/tree/1.9.4
+- License: ISC License
+- Copyright: Copyright (c) 2020 Kiril Vatev
+
+The complete license text is included at
+`assets/third-party/canvas-confetti/LICENSE`.
