@@ -7,6 +7,21 @@ const todoCntElement = document.querySelector("#todoCnt");
 const doneCntElement = document.querySelector("#doneCnt");
 const todoProgress = document.querySelector("#todoProgress");
 const progressPercent = document.querySelector("#progressPercent");
+const focusTodo = document.querySelector("#focusTodo");
+const pomodoroMode = document.querySelector("#pomodoroMode");
+const pomodoroTime = document.querySelector("#pomodoroTime");
+const pomodoroStatus = document.querySelector("#pomodoroStatus");
+const pomodoroStart = document.querySelector("#pomodoroStart");
+const pomodoroReset = document.querySelector("#pomodoroReset");
+
+const FOCUS_SECONDS = 25 * 60;
+const BREAK_SECONDS = 5 * 60;
+
+let timerMode = "focus";
+let remainingSeconds = FOCUS_SECONDS;
+let timerId = null;
+let timerEndsAt = null;
+let nextTodoId = 1;
 
 updateSummary();
 
@@ -14,6 +29,9 @@ todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
   addTodo();
 });
+
+pomodoroStart.addEventListener("click", togglePomodoro);
+pomodoroReset.addEventListener("click", resetPomodoro);
 
 function addTodo() {
   const text = todoInput.value.trim();
@@ -24,6 +42,7 @@ function addTodo() {
   }
 
   const todo = document.createElement("li");
+  todo.dataset.id = String(nextTodoId++);
   const label = document.createElement("label");
 
   const checkbox = document.createElement("input");
@@ -117,4 +136,94 @@ function updateSummary() {
   todoProgress.value = percentage;
   todoProgress.textContent = `${percentage}%`;
   progressPercent.textContent = `${percentage}%`;
+  updateFocusOptions();
+}
+
+function updateFocusOptions() {
+  const selectedTodo = focusTodo.value;
+  const activeTodos = [...todoList.children].filter((todo) => {
+    return !todo.querySelector('input[type="checkbox"]').checked;
+  });
+
+  focusTodo.replaceChildren(new Option("집중할 할 일을 선택하세요", ""));
+
+  activeTodos.forEach((todo) => {
+    const text = todo.querySelector("span").textContent;
+    focusTodo.add(new Option(text, todo.dataset.id));
+  });
+
+  const selectedOptionExists = [...focusTodo.options].some((option) => {
+    return option.value === selectedTodo;
+  });
+
+  if (selectedOptionExists) focusTodo.value = selectedTodo;
+}
+
+function togglePomodoro() {
+  if (timerId) {
+    pausePomodoro();
+    return;
+  }
+
+  timerEndsAt = Date.now() + remainingSeconds * 1000;
+  timerId = window.setInterval(updatePomodoro, 250);
+  pomodoroStart.textContent = "일시 정지";
+  pomodoroStatus.textContent = timerMode === "focus" ? "집중하고 있어요." : "잠시 쉬어가세요.";
+}
+
+function pausePomodoro() {
+  window.clearInterval(timerId);
+  timerId = null;
+  timerEndsAt = null;
+  pomodoroStart.textContent = "계속하기";
+  pomodoroStatus.textContent = "타이머를 잠시 멈췄어요.";
+}
+
+function updatePomodoro() {
+  remainingSeconds = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
+  renderPomodoroTime();
+
+  if (remainingSeconds === 0) finishPomodoro();
+}
+
+function finishPomodoro() {
+  window.clearInterval(timerId);
+  timerId = null;
+  timerEndsAt = null;
+
+  if (timerMode === "focus") {
+    timerMode = "break";
+    remainingSeconds = BREAK_SECONDS;
+    pomodoroStatus.textContent = "집중 완료! 5분 동안 쉬어가세요.";
+  } else {
+    timerMode = "focus";
+    remainingSeconds = FOCUS_SECONDS;
+    pomodoroStatus.textContent = "휴식 완료! 다음 집중을 준비하세요.";
+  }
+
+  renderPomodoro();
+}
+
+function resetPomodoro() {
+  window.clearInterval(timerId);
+  timerId = null;
+  timerEndsAt = null;
+  timerMode = "focus";
+  remainingSeconds = FOCUS_SECONDS;
+  pomodoroStatus.textContent = "집중할 준비가 됐어요.";
+  renderPomodoro();
+}
+
+function renderPomodoro() {
+  pomodoroMode.textContent = timerMode === "focus" ? "집중" : "휴식";
+  pomodoroMode.classList.toggle("break", timerMode === "break");
+  pomodoroStart.textContent = "시작";
+  renderPomodoroTime();
+}
+
+function renderPomodoroTime() {
+  const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
+  const seconds = String(remainingSeconds % 60).padStart(2, "0");
+  pomodoroTime.textContent = `${minutes}:${seconds}`;
+  document.title = timerId ? `${minutes}:${seconds} · TodoList` : "TodoList 실습";
 }

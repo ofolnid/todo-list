@@ -39,6 +39,29 @@
         <ul id="todoList" class="todo-list"></ul>
         <p id="emptyTodoListMsg">등록된 할 일이 없습니다.</p>
       </section>
+
+      <section class="pomodoro" aria-labelledby="pomodoroTitle">
+        <div class="pomodoro-heading">
+          <div>
+            <p class="pomodoro-eyebrow">집중 타이머</p>
+            <h2 id="pomodoroTitle">뽀모도로</h2>
+          </div>
+          <span id="pomodoroMode" class="pomodoro-mode">집중</span>
+        </div>
+
+        <label for="focusTodo" class="sr-only">집중할 할 일</label>
+        <select id="focusTodo">
+          <option value="">집중할 할 일을 선택하세요</option>
+        </select>
+
+        <p id="pomodoroTime" class="pomodoro-time" role="timer" aria-live="off">25:00</p>
+        <p id="pomodoroStatus" class="pomodoro-status" aria-live="polite">집중할 준비가 됐어요.</p>
+
+        <div class="pomodoro-controls">
+          <button id="pomodoroStart" type="button">시작</button>
+          <button id="pomodoroReset" type="button" class="secondary-btn">초기화</button>
+        </div>
+      </section>
     </main>
   </body>
 </html>
