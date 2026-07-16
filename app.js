@@ -6,11 +6,7 @@ const emptyMessage = document.querySelector("#emptyTodoListMsg");
 const todoCntElement = document.querySelector("#todoCnt");
 const doneCntElement = document.querySelector("#doneCnt");
 
-let todoCnt = 0;
-let doneCnt = 0;
-
-updateEmptyMessage();
-updateCount();
+updateSummary();
 
 todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -26,7 +22,6 @@ function addTodo() {
   }
 
   const todo = document.createElement("li");
-
   const label = document.createElement("label");
 
   const checkbox = document.createElement("input");
@@ -36,32 +31,27 @@ function addTodo() {
   todoText.textContent = text;
 
   const delBtn = document.createElement("button");
+  delBtn.type = "button";
   delBtn.textContent = "X";
   delBtn.className = "delBtn";
+  delBtn.setAttribute("aria-label", `${text} 삭제`);
 
   checkbox.addEventListener("change", () => {
     todoText.classList.toggle("done", checkbox.checked);
     moveTodo(todo, checkbox.checked);
-    updateCount();
+    updateSummary();
   });
 
   delBtn.addEventListener("click", () => {
-    if (checkbox.checked) {
-      doneCnt--;
-    }
     todo.remove();
-    todoCnt--;
-    updateEmptyMessage();
-    updateCount();
+    updateSummary();
   });
 
   label.append(checkbox, todoText);
   todo.append(label, delBtn);
   todoList.appendChild(todo);
 
-  todoCnt++;
-  updateCount();
-  updateEmptyMessage();
+  updateSummary();
 
   todoInput.value = "";
   todoInput.focus();
@@ -70,13 +60,11 @@ function addTodo() {
 function moveTodo(todo, isDone) {
   if (isDone) {
     todoList.append(todo);
-    doneCnt++;
     return;
   }
 
-  const firstDoneTodo = [...todoList.children].find((li) => {
-    const checkbox = li.querySelector('input[type="checkbox"]');
-
+  const firstDoneTodo = [...todoList.children].find((item) => {
+    const checkbox = item.querySelector('input[type="checkbox"]');
     return checkbox.checked;
   });
 
@@ -85,14 +73,13 @@ function moveTodo(todo, isDone) {
   } else {
     todoList.append(todo);
   }
-  doneCnt--;
 }
 
-function updateEmptyMessage() {
-  emptyMessage.hidden = todoCnt !== 0;
-}
+function updateSummary() {
+  const todoCount = todoList.children.length;
+  const doneCount = todoList.querySelectorAll('input[type="checkbox"]:checked').length;
 
-function updateCount() {
-  todoCntElement.textContent = todoCnt;
-  doneCntElement.textContent = doneCnt;
+  todoCntElement.textContent = todoCount;
+  doneCntElement.textContent = doneCount;
+  emptyMessage.hidden = todoCount !== 0;
 }

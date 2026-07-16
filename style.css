@@ -12,7 +12,7 @@ body {
 #todoApp {
   margin: 30px auto;
   padding: 32px 24px;
-  width: 340px;
+  width: min(340px, calc(100% - 32px));
   display: flex;
   gap: 20px;
   flex-direction: column;
@@ -56,7 +56,7 @@ h1 {
 }
 
 #todoAddBtn {
-  white-space: wrap;
+  white-space: nowrap;
   flex: 0 0 auto;
   background-color: #007fe7;
   color: #fff;
@@ -161,4 +161,16 @@ hr {
   text-align: center;
   color: #95a9ba;
   font-size: 14px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
