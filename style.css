@@ -157,6 +157,47 @@ hr {
   color: #007fe7;
 }
 
+.progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  color: #476d8c;
+  font-size: 13px;
+}
+
+#progressPercent {
+  color: #007fe7;
+}
+
+#todoProgress {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background-color: #dceef7;
+}
+
+#todoProgress::-webkit-progress-bar {
+  background-color: #dceef7;
+}
+
+#todoProgress::-webkit-progress-value {
+  border-radius: 999px;
+  background-color: #007fe7;
+  transition: width 300ms ease;
+}
+
+#todoProgress::-moz-progress-bar {
+  border-radius: 999px;
+  background-color: #007fe7;
+}
+
 #emptyTodoListMsg {
   text-align: center;
   color: #95a9ba;

@@ -5,6 +5,8 @@ const emptyMessage = document.querySelector("#emptyTodoListMsg");
 
 const todoCntElement = document.querySelector("#todoCnt");
 const doneCntElement = document.querySelector("#doneCnt");
+const todoProgress = document.querySelector("#todoProgress");
+const progressPercent = document.querySelector("#progressPercent");
 
 updateSummary();
 
@@ -110,4 +112,9 @@ function updateSummary() {
   todoCntElement.textContent = todoCount;
   doneCntElement.textContent = doneCount;
   emptyMessage.hidden = todoCount !== 0;
+
+  const percentage = todoCount === 0 ? 0 : Math.round((doneCount / todoCount) * 100);
+  todoProgress.value = percentage;
+  todoProgress.textContent = `${percentage}%`;
+  progressPercent.textContent = `${percentage}%`;
 }

@@ -22,6 +22,13 @@
         <div class="todo-cnt">
           <span>총 <span id="todoCnt">0</span>개 중 <span id="doneCnt">0</span>개 완료</span>
         </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>오늘의 달성률</span>
+            <strong id="progressPercent">0%</strong>
+          </div>
+          <progress id="todoProgress" max="100" value="0" aria-label="오늘의 할 일 달성률">0%</progress>
+        </div>
         <form id="todoForm" class="todo-form">
           <label for="todoInput" class="sr-only">할 일</label>
           <input type="text" id="todoInput" placeholder="할 일을 입력하세요" autocomplete="off" />
