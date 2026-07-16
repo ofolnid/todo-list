@@ -12,6 +12,9 @@ body {
 .container {
   display: grid;
   grid-template-columns: minmax(0, 340px) minmax(0, 300px);
+  grid-template-areas:
+    "todo timer"
+    "completed timer";
   align-items: start;
   justify-content: center;
   gap: 20px;
@@ -20,6 +23,7 @@ body {
 }
 
 #todoApp {
+  grid-area: todo;
   padding: 32px 24px;
   width: 100%;
   display: flex;
@@ -87,7 +91,7 @@ h1 {
   padding: 0;
 }
 
-#todoList > li {
+.todo-list > li {
   all: unset;
   width: 100%;
   display: flex;
@@ -101,11 +105,41 @@ h1 {
   background-color: #fefefe;
 }
 
-#todoList > li:hover {
+.drag-handle {
+  flex: 0 0 auto;
+  border: 0;
+  color: #95a9ba;
+  background: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle:focus-visible {
+  outline: 2px solid #76c1ff;
+  outline-offset: 2px;
+}
+
+.todo-ghost {
+  opacity: 0.35;
+  background-color: #dceeff !important;
+}
+
+.todo-chosen {
+  border-color: #007fe7 !important;
+  box-shadow: 0 6px 14px rgba(0, 127, 231, 0.15);
+}
+
+.todo-list > li:hover {
   border-color: #76c1ff;
 }
 
-#todoList > li > label {
+.todo-list > li > label {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -114,17 +148,17 @@ h1 {
   cursor: pointer;
 }
 
-#todoList > li > label > span {
+.todo-list > li > label > span {
   flex: 1;
   min-width: 0;
   overflow-wrap: break-word;
 }
 
-#todoList > li > label > span:hover {
+.todo-list > li > label > span:hover {
   opacity: 0.8;
 }
 
-#todoList > li > label > span.done {
+.todo-list > li > label > span.done {
   color: #aaa;
   text-decoration: line-through;
 }
@@ -214,6 +248,7 @@ hr {
 }
 
 .pomodoro {
+  grid-area: timer;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -222,6 +257,57 @@ hr {
   border-radius: 12px;
   background-color: #f0fbff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.completed-widget {
+  grid-area: completed;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 18px;
+  border: 1px solid #d8dde2;
+  border-radius: 8px;
+  background-color: #f5f6f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.completed-widget[hidden] {
+  display: none;
+}
+
+.completed-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#completedTitle {
+  color: #6d747b;
+  font-size: 15px;
+}
+
+#clearCompletedBtn {
+  border: 0;
+  color: #8b9298;
+  background: none;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+#clearCompletedBtn:hover {
+  color: #555b60;
+  text-decoration: underline;
+}
+
+.completed-list > li {
+  border-color: #e1e4e7;
+  color: #969ba0;
+  background-color: #fbfbfb;
+}
+
+.completed-list .drag-handle {
+  display: none;
 }
 
 .pomodoro-heading,
@@ -348,6 +434,10 @@ hr {
 @media (max-width: 700px) {
   .container {
     grid-template-columns: minmax(0, 340px);
+    grid-template-areas:
+      "todo"
+      "completed"
+      "timer";
   }
 }
 

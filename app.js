@@ -1,7 +1,11 @@
 const todoInput = document.querySelector("#todoInput");
 const todoForm = document.querySelector("#todoForm");
 const todoList = document.querySelector("#todoList");
+const completedTodoList = document.querySelector("#completedTodoList");
 const emptyMessage = document.querySelector("#emptyTodoListMsg");
+const completedWidget = document.querySelector("#completedWidget");
+const completedCntElement = document.querySelector("#completedCnt");
+const clearCompletedBtn = document.querySelector("#clearCompletedBtn");
 
 const todoCntElement = document.querySelector("#todoCnt");
 const doneCntElement = document.querySelector("#doneCnt");
@@ -37,6 +41,16 @@ todoForm.addEventListener("submit", (e) => {
 
 pomodoroStart.addEventListener("click", togglePomodoro);
 pomodoroReset.addEventListener("click", resetPomodoro);
+clearCompletedBtn.addEventListener("click", clearCompletedTodos);
+
+if (typeof window.Sortable === "function") {
+  window.Sortable.create(todoList, {
+    animation: 180,
+    handle: ".drag-handle",
+    ghostClass: "todo-ghost",
+    chosenClass: "todo-chosen",
+  });
+}
 
 function addTodo() {
   const text = todoInput.value.trim();
@@ -48,6 +62,15 @@ function addTodo() {
 
   const todo = document.createElement("li");
   todo.dataset.id = String(nextTodoId++);
+
+  const dragHandle = document.createElement("button");
+  dragHandle.type = "button";
+  dragHandle.className = "drag-handle";
+  dragHandle.textContent = "⠿";
+  dragHandle.setAttribute("aria-label", `${text} 우선순위 변경`);
+  dragHandle.title = "드래그하거나 Alt + 위/아래 방향키로 순서 변경";
+  dragHandle.addEventListener("keydown", (event) => moveTodoWithKeyboard(event, todo));
+
   const label = document.createElement("label");
 
   const checkbox = document.createElement("input");
@@ -75,18 +98,8 @@ function addTodo() {
   });
 
   label.append(checkbox, todoText);
-  todo.append(label, delBtn);
-
-  const firstDoneTodo = [...todoList.children].find((item) => {
-    const checkbox = item.querySelector('input[type="checkbox"]');
-    return checkbox.checked;
-  });
-
-  if (firstDoneTodo) {
-    todoList.insertBefore(todo, firstDoneTodo);
-  } else {
-    todoList.append(todo);
-  }
+  todo.append(dragHandle, label, delBtn);
+  todoList.append(todo);
 
   updateSummary();
 
@@ -96,47 +109,46 @@ function addTodo() {
 
 function moveTodo(todo, isDone) {
   const previousPositions = new Map(
-    [...todoList.children].map((item) => [item, item.getBoundingClientRect().top]),
+    getAllTodoItems().map((item) => [item, item.getBoundingClientRect()]),
   );
 
   if (isDone) {
-    todoList.append(todo);
+    completedWidget.hidden = false;
+    completedTodoList.prepend(todo);
   } else {
-    const firstDoneTodo = [...todoList.children].find((item) => {
-      const checkbox = item.querySelector('input[type="checkbox"]');
-      return checkbox.checked;
-    });
-
-    if (firstDoneTodo) {
-      todoList.insertBefore(todo, firstDoneTodo);
-    } else {
-      todoList.append(todo);
-    }
+    todoList.append(todo);
   }
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  [...todoList.children].forEach((item) => {
-    const previousTop = previousPositions.get(item);
-    const currentTop = item.getBoundingClientRect().top;
-    const distance = previousTop - currentTop;
+  getAllTodoItems().forEach((item) => {
+    const previousPosition = previousPositions.get(item);
+    const currentPosition = item.getBoundingClientRect();
+    const distanceX = previousPosition.left - currentPosition.left;
+    const distanceY = previousPosition.top - currentPosition.top;
 
-    if (distance === 0) return;
+    if (distanceX === 0 && distanceY === 0) return;
 
     item.animate(
-      [{ transform: `translateY(${distance}px)` }, { transform: "translateY(0)" }],
+      [
+        { transform: `translate(${distanceX}px, ${distanceY}px)` },
+        { transform: "translate(0, 0)" },
+      ],
       { duration: 300, easing: "ease-out" },
     );
   });
 }
 
 function updateSummary() {
-  const todoCount = todoList.children.length;
-  const doneCount = todoList.querySelectorAll('input[type="checkbox"]:checked').length;
+  const activeCount = todoList.children.length;
+  const doneCount = completedTodoList.children.length;
+  const todoCount = activeCount + doneCount;
 
   todoCntElement.textContent = todoCount;
   doneCntElement.textContent = doneCount;
-  emptyMessage.hidden = todoCount !== 0;
+  completedCntElement.textContent = doneCount;
+  emptyMessage.hidden = activeCount !== 0;
+  completedWidget.hidden = doneCount === 0;
 
   const percentage = todoCount === 0 ? 0 : Math.round((doneCount / todoCount) * 100);
   todoProgress.value = percentage;
@@ -255,8 +267,8 @@ function addTomato() {
 }
 
 function celebrateAllTodosDone() {
-  const todoCount = todoList.children.length;
-  const doneCount = todoList.querySelectorAll('input[type="checkbox"]:checked').length;
+  const todoCount = getAllTodoItems().length;
+  const doneCount = completedTodoList.children.length;
 
   if (todoCount === 0 || todoCount !== doneCount) return;
 
@@ -295,4 +307,29 @@ function celebrateAllTodosDone() {
 
   window.confetti({ ...options, angle: 60, origin: { x: 0, y: 0.65 } });
   window.confetti({ ...options, angle: 120, origin: { x: 1, y: 0.65 } });
+}
+
+function getAllTodoItems() {
+  return [...todoList.children, ...completedTodoList.children];
+}
+
+function clearCompletedTodos() {
+  completedTodoList.replaceChildren();
+  updateSummary();
+}
+
+function moveTodoWithKeyboard(event, todo) {
+  if (!event.altKey || !["ArrowUp", "ArrowDown"].includes(event.key)) return;
+
+  event.preventDefault();
+  const sibling = event.key === "ArrowUp" ? todo.previousElementSibling : todo.nextElementSibling;
+  if (!sibling) return;
+
+  if (event.key === "ArrowUp") {
+    todoList.insertBefore(todo, sibling);
+  } else {
+    todoList.insertBefore(sibling, todo);
+  }
+
+  todo.querySelector(".drag-handle").focus();
 }

@@ -21,3 +21,14 @@ The complete license text is included at
 
 The complete license text is included at
 `assets/third-party/canvas-confetti/LICENSE`.
+
+## SortableJS
+
+- Project: SortableJS
+- Version: 1.15.7
+- Source: https://github.com/SortableJS/Sortable/tree/1.15.7
+- License: MIT License
+- Copyright: Copyright 2019 All contributors to Sortable
+
+The complete license text is included at
+`assets/third-party/sortablejs/LICENSE`.

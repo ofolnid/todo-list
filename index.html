@@ -11,6 +11,7 @@
     <!-- JavaScript 파일 연결 -->
     <!-- defer는 HTML을 먼저 읽은 뒤 JavaScript를 실행하게 한다. -->
     <script src="assets/third-party/canvas-confetti/confetti.browser.min.js" defer></script>
+    <script src="assets/third-party/sortablejs/Sortable.min.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -38,7 +39,15 @@
         <hr />
 
         <ul id="todoList" class="todo-list"></ul>
-        <p id="emptyTodoListMsg">등록된 할 일이 없습니다.</p>
+        <p id="emptyTodoListMsg">진행 중인 할 일이 없습니다.</p>
+      </section>
+
+      <section id="completedWidget" class="completed-widget" aria-labelledby="completedTitle" hidden>
+        <div class="completed-heading">
+          <h2 id="completedTitle">완료한 일 <span id="completedCnt">0</span>개</h2>
+          <button id="clearCompletedBtn" type="button">모두 지우기</button>
+        </div>
+        <ul id="completedTodoList" class="todo-list completed-list"></ul>
       </section>
 
       <section class="pomodoro" aria-labelledby="pomodoroTitle">
