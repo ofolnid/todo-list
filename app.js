@@ -49,6 +49,10 @@ if (typeof window.Sortable === "function") {
     handle: ".drag-handle",
     ghostClass: "todo-ghost",
     chosenClass: "todo-chosen",
+    fallbackClass: "todo-drag-preview",
+    forceFallback: true,
+    fallbackOnBody: true,
+    fallbackTolerance: 3,
   });
 }
 
@@ -63,10 +67,11 @@ function addTodo() {
   const todo = document.createElement("li");
   todo.dataset.id = String(nextTodoId++);
 
-  const dragHandle = document.createElement("button");
-  dragHandle.type = "button";
+  const dragHandle = document.createElement("span");
   dragHandle.className = "drag-handle";
   dragHandle.textContent = "⠿";
+  dragHandle.tabIndex = 0;
+  dragHandle.setAttribute("role", "button");
   dragHandle.setAttribute("aria-label", `${text} 우선순위 변경`);
   dragHandle.title = "드래그하거나 Alt + 위/아래 방향키로 순서 변경";
   dragHandle.addEventListener("keydown", (event) => moveTodoWithKeyboard(event, todo));

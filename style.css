@@ -91,7 +91,8 @@ h1 {
   padding: 0;
 }
 
-.todo-list > li {
+.todo-list > li,
+.todo-drag-preview {
   all: unset;
   width: 100%;
   display: flex;
@@ -106,14 +107,18 @@ h1 {
 }
 
 .drag-handle {
-  flex: 0 0 auto;
-  border: 0;
+  flex: 0 0 26px;
+  display: grid;
+  width: 26px;
+  height: 32px;
+  place-items: center;
   color: #95a9ba;
-  background: none;
   font-size: 18px;
   line-height: 1;
   cursor: grab;
   touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .drag-handle:active {
@@ -135,11 +140,19 @@ h1 {
   box-shadow: 0 6px 14px rgba(0, 127, 231, 0.15);
 }
 
+.todo-drag-preview {
+  z-index: 1000;
+  opacity: 0.95;
+  border-color: #76c1ff;
+  box-shadow: 0 10px 24px rgba(0, 85, 150, 0.18);
+}
+
 .todo-list > li:hover {
   border-color: #76c1ff;
 }
 
-.todo-list > li > label {
+.todo-list > li > label,
+.todo-drag-preview > label {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -148,7 +161,8 @@ h1 {
   cursor: pointer;
 }
 
-.todo-list > li > label > span {
+.todo-list > li > label > span,
+.todo-drag-preview > label > span {
   flex: 1;
   min-width: 0;
   overflow-wrap: break-word;
@@ -158,7 +172,8 @@ h1 {
   opacity: 0.8;
 }
 
-.todo-list > li > label > span.done {
+.todo-list > li > label > span.done,
+.todo-drag-preview > label > span.done {
   color: #aaa;
   text-decoration: line-through;
 }
